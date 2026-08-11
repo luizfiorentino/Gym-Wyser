@@ -4,44 +4,57 @@ import Image from "next/image";
 import { useState } from "react";
 
 export default function Home() {
-  const [exercises, setExercises] = useState([]);
-
-  let groups = [
+  const [exercises, setExercises] = useState([
     { name: "breast", isSelected: false },
     { name: "back", isSelected: false },
     { name: "biceps", isSelected: false },
     { name: "triceps", isSelected: false },
     { name: "shoulders", isSelected: false },
-  ];
-  console.log("Groups->", groups);
+  ]);
+
+  const addGroup = (item) => {
+    setExercises(
+      exercises.map((exercise) =>
+        exercise.name === item.name
+          ? { ...exercise, isSelected: !exercise.isSelected }
+          : exercise,
+      ),
+    );
+  };
+
+  const removeGroup = (item) => {
+    setExercises(
+      exercises.map((exercise) =>
+        exercise.name === item.name
+          ? { ...exercise, isSelected: !exercise.isSelected }
+          : exercise,
+      ),
+    );
+  };
+
+  const selectedExercises = exercises.filter((item) => item.isSelected);
+  const notSelectedExercises = exercises.filter((item) => !item.isSelected);
 
   return (
     <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
       <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
         <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
           <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
             Welcome to Gym-Wize
           </h1>
-          <h2>Selected groups</h2>
-
-          <h2>Select groups</h2>
-          {groups.map((item, i) => (
+          {selectedExercises.length ? <h2>Selected groups</h2> : ""}
+          {selectedExercises.map((item, i) => (
+            <button onClick={() => removeGroup(item)} key={i}>
+              {item.name}
+              {"-"}
+            </button>
+          ))}
+          {notSelectedExercises.length ? <h2>Add</h2> : ""}
+          {notSelectedExercises.map((item, i) => (
             <div key={i}>
-              <button
-                onClick={() => {
-                  [...groups, !item.isSelected];
-                }}
-                key={i}
-              >
+              <button onClick={() => addGroup(item)} key={i}>
                 {item.name}
+                {"+"}
               </button>
             </div>
           ))}
