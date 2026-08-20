@@ -185,10 +185,18 @@ export default function Home() {
   // };
 
   // const selectedExercises = exercises.filter((item) => item.isSelected);
+  const displayGroupExercises = (group) => {
+    //console.log("displayGroupExercises, group:", group);
+    setExercises(
+      exercises.map((item) =>
+        item.group === group ? { ...item, isSelected: !item.isSelected } : item,
+      ),
+    );
+  };
 
   useEffect(() => {
-    console.log("updated");
-  }, []);
+    console.log("updated", exercises);
+  }, [exercises]);
 
   return (
     <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
@@ -207,7 +215,15 @@ export default function Home() {
           {exercises.length &&
             exercises.map((group, i) => (
               <div key={i}>
-                <button>{group.group}</button>
+                <button onClick={() => displayGroupExercises(group.group)}>
+                  {group.group}
+                </button>
+                {group.isSelected &&
+                  group?.exercises?.map((item, j) => (
+                    <div key={j}>
+                      <ul>{item.name}</ul>
+                    </div>
+                  ))}
               </div>
             ))}
         </div>
