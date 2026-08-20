@@ -1,12 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const [exercises, setExercises] = useState([
     {
       group: "chest",
+      isSelected: false,
       exercises: [
         { name: "bench press", chosen: false },
         { name: "incline dumbbell press", chosen: false },
@@ -26,6 +27,7 @@ export default function Home() {
     },
     {
       group: "back",
+      isSelected: false,
       exercises: [
         { name: "lat pulldown", chosen: false },
         { name: "one arm dumbbell row", chosen: false },
@@ -45,6 +47,7 @@ export default function Home() {
     },
     {
       group: "biceps",
+      isSelected: false,
       exercises: [
         { name: "concentration curl", chosen: false },
         { name: "machine preacher curl", chosen: false },
@@ -68,6 +71,7 @@ export default function Home() {
     },
     {
       group: "triceps",
+      isSelected: false,
       exercises: [
         { name: "triceps pushdown", chosen: false },
         { name: "skull crushers", chosen: false },
@@ -92,6 +96,7 @@ export default function Home() {
     },
     {
       group: "abs",
+      isSelected: false,
       exercises: [
         { name: "sit-up", chosen: false },
         { name: "seated ab crunch machine", chosen: false },
@@ -118,6 +123,7 @@ export default function Home() {
     { group: "shoulders", isSelected: false },
     {
       group: "legs",
+      isSelected: false,
       exercises: [
         { name: "leg press", chosen: false },
         { name: "leg extension", chosen: false },
@@ -168,28 +174,21 @@ export default function Home() {
     },
   ]);
 
-  const addGroup = (item) => {
-    setExercises(
-      exercises.map((exercise) =>
-        exercise.group === item.group
-          ? { ...exercise, isSelected: !exercise.isSelected }
-          : exercise,
-      ),
-    );
-  };
+  // const addGroup = (item) => {
+  //   setExercises(
+  //     exercises.map((exercise) =>
+  //       exercise.group === item.group
+  //         ? { ...exercise, isSelected: !exercise.isSelected }
+  //         : exercise,
+  //     ),
+  //   );
+  // };
 
-  const removeGroup = (item) => {
-    setExercises(
-      exercises.map((exercise) =>
-        exercise.group === item.group
-          ? { ...exercise, isSelected: !exercise.isSelected }
-          : exercise,
-      ),
-    );
-  };
+  // const selectedExercises = exercises.filter((item) => item.isSelected);
 
-  const selectedExercises = exercises.filter((item) => item.isSelected);
-  const notSelectedExercises = exercises.filter((item) => !item.isSelected);
+  useEffect(() => {
+    console.log("updated");
+  }, []);
 
   return (
     <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
@@ -198,22 +197,19 @@ export default function Home() {
           <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
             Welcome to Gym-Wize
           </h1>
-          {selectedExercises.length ? <h2>Selected groups</h2> : ""}
+          {/* {selectedExercises.length ? <h2>Selected groups</h2> : ""}
           {selectedExercises.map((item, i) => (
             <button onClick={() => removeGroup(item)} key={i}>
               {item.group}
               {"-"}
             </button>
-          ))}
-          {notSelectedExercises.length ? <h2>Add</h2> : ""}
-          {notSelectedExercises.map((item, i) => (
-            <div key={i}>
-              <button onClick={() => addGroup(item)} key={i}>
-                {item.group}
-                {"+"}
-              </button>
-            </div>
-          ))}
+          ))} */}
+          {exercises.length &&
+            exercises.map((group, i) => (
+              <div key={i}>
+                <button>{group.group}</button>
+              </div>
+            ))}
         </div>
 
         <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
