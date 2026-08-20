@@ -174,19 +174,7 @@ export default function Home() {
     },
   ]);
 
-  // const addGroup = (item) => {
-  //   setExercises(
-  //     exercises.map((exercise) =>
-  //       exercise.group === item.group
-  //         ? { ...exercise, isSelected: !exercise.isSelected }
-  //         : exercise,
-  //     ),
-  //   );
-  // };
-
-  // const selectedExercises = exercises.filter((item) => item.isSelected);
   const displayGroupExercises = (group) => {
-    //console.log("displayGroupExercises, group:", group);
     setExercises(
       exercises.map((item) =>
         item.group === group ? { ...item, isSelected: !item.isSelected } : item,
@@ -194,8 +182,26 @@ export default function Home() {
     );
   };
 
+  const addOrRemoveExercise = (exercise, group) => {
+    //console.log("addOrRemoveEx, exercise:", exercise, "Group:", group);
+    setExercises(
+      exercises.map((item) =>
+        item.group === group.group
+          ? {
+              ...item,
+              exercises: item.exercises.map((subItem) =>
+                subItem.name === exercise
+                  ? { ...subItem, chosen: !subItem.chosen }
+                  : subItem,
+              ),
+            }
+          : item,
+      ),
+    );
+  };
+
   useEffect(() => {
-    console.log("updated", exercises);
+    console.log("useEffect, exercises:", exercises);
   }, [exercises]);
 
   return (
@@ -205,13 +211,7 @@ export default function Home() {
           <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
             Welcome to Gym-Wize
           </h1>
-          {/* {selectedExercises.length ? <h2>Selected groups</h2> : ""}
-          {selectedExercises.map((item, i) => (
-            <button onClick={() => removeGroup(item)} key={i}>
-              {item.group}
-              {"-"}
-            </button>
-          ))} */}
+
           {exercises.length &&
             exercises.map((group, i) => (
               <div key={i}>
@@ -221,7 +221,9 @@ export default function Home() {
                 {group.isSelected &&
                   group?.exercises?.map((item, j) => (
                     <div key={j}>
-                      <ul>{item.name}</ul>
+                      <ul onClick={() => addOrRemoveExercise(item.name, group)}>
+                        {item.name}
+                      </ul>
                     </div>
                   ))}
               </div>
