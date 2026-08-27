@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-  const [trainSubmitted, setTrainSubmitted] = useState(false);
+  const [trainStep, setTrainStep] = useState(1);
   const [exercises, setExercises] = useState([
     {
       group: "chest",
@@ -201,19 +201,22 @@ export default function Home() {
   };
 
   const submitTrain = () => {
-    if (trainSubmitted) {
+    if (trainStep === 1) {
+      setTrainStep(2);
+    }
+    if (trainStep === 2) {
       setExercises(
         exercises.map((item) => {
           return { ...item, isSelected: false };
         }),
       );
+      setTrainStep(1);
     }
-    setTrainSubmitted(!trainSubmitted);
   };
 
   useEffect(() => {
     //console.log("useEffect, exercises:", exercises);
-  }, [exercises, trainSubmitted]);
+  }, [exercises, trainStep]);
 
   return (
     <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
@@ -258,7 +261,7 @@ export default function Home() {
             </div>
           }
 
-          {!trainSubmitted &&
+          {trainStep === 1 &&
             exercises.length &&
             exercises.map((group, i) => (
               <div key={i}>
@@ -287,7 +290,7 @@ export default function Home() {
           />
           <div className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]">
             <button onClick={() => submitTrain()}>
-              {!trainSubmitted ? "Confirm train" : "Return"}
+              {trainStep === 1 ? "Confirm train" : "Return"}
             </button>
           </div>
 
