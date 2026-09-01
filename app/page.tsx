@@ -214,8 +214,74 @@ export default function Home() {
     }
   };
 
+  const updateExercise = (exercise, setOrReps, value) => {
+    // takes selected number of sets, eg. 3, and creates an array of objects one for each set ->
+    // [{set:1, reps: 0}, {set:2, reps: 0}...]
+    console.log("UPDATE EXERCISE CALLED");
+    let arrayOfSets = [];
+    for (let i = value; i > 0; i--) {
+      arrayOfSets.push({ set: i, reps: 0 });
+      console.log("ARRAY OF SETS, value:", value);
+    }
+    setExercises(
+      exercises.map((groupExercises) => ({
+        ...groupExercises,
+        exercises: groupExercises.exercises?.map((oneExercise) =>
+          oneExercise.name === exercise.name
+            ? { ...oneExercise, arrayOfSets }
+            : oneExercise,
+        ),
+      })),
+    );
+    console.log("arrayOfSets:::", arrayOfSets);
+
+    // console.log(
+    //   "clicked confirm number sets, exercise:",
+    //   "exerciseL",
+    //   exercise,
+    //   "sets:",
+    //   numSets,
+    //   "value:",
+    //   value,
+    //   "testAddSetsToExercises:",
+    //   testAddSetsToExercises,
+    // );
+  };
+
+  const confirmNumberOfSets = (sets) => {
+    console.log("confirmNumberOfSets, sets:", sets);
+  };
+
+  //const setsRange = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const setsRange = (range) => {
+    let rangeArray = [];
+    for (let i = 0; i > range; i--) {
+      rangeArray.push(i);
+    }
+    return rangeArray;
+  };
+
+  const addSelectOptions = (numberofOptions) => {
+    console.log("addSelectedOptions called");
+    for (let i = numberofOptions; i < 0; i--) {
+      return <option>{i}</option>;
+    }
+  };
+
+  const testMe = (number) => {
+    // Describe the loop
+    // function receives a number eg. 5
+    // takes this number
+    let arrayOfOptions = [];
+    for (let i = 1; i <= number; i++) {
+      arrayOfOptions.push(i);
+    }
+    console.log("testMe, arrayOfOptions:", arrayOfOptions);
+    return arrayOfOptions;
+  };
+
   useEffect(() => {
-    //console.log("useEffect, exercises:", exercises);
+    console.log("useEffect, exercises:", exercises);
   }, [exercises, trainStep]);
 
   return (
@@ -229,11 +295,11 @@ export default function Home() {
           {
             <div>
               <div>
-                {exercises.find((group) =>
+                {/* {exercises?.find((group) =>
                   group.exercises?.find((exercise) => exercise.chosen),
                 )
                   ? "Selected Exercises"
-                  : "Add exercises"}
+                  : "Add exercises"} */}
               </div>
               {exercises.map((item, i) => (
                 <div key={i}>
@@ -241,18 +307,78 @@ export default function Home() {
                     {item.exercises?.find((exercise) => exercise.chosen) &&
                       item.group}
                   </h2>
+
                   <div>
                     {" "}
                     {item.exercises &&
-                      item.exercises.map((exercise) =>
+                      item.exercises.map((exercise, i) =>
                         exercise.chosen ? (
-                          <ul
-                            onClick={() =>
-                              addOrRemoveExercise(exercise.name, item)
-                            }
-                          >
-                            {exercise.name} - remove
-                          </ul>
+                          <div key={i}>
+                            {trainStep === 2 && (
+                              <div>
+                                {/* <label>Sets </label>
+                                <input
+                                  type="number"
+                                  onChange={(e) =>
+                                    updateExercise(
+                                      exercise,
+                                      "sets",
+                                      Number(e.target.value),
+                                    )
+                                  }
+                                /> */}
+                                {/* <select>
+                                    {setsRange.map((oneOption) => (
+                                      <option>{oneOption}</option>
+                                    ))}
+                                  </select> */}
+                                {exercise.name} - remove -Sets:{" "}
+                                <label>SETS </label>{" "}
+                                <select
+                                  onChange={(e) =>
+                                    updateExercise(
+                                      exercise,
+                                      "sets",
+                                      Number(e.target.value),
+                                    )
+                                  }
+                                >
+                                  <option>Chose a number</option>
+                                  {testMe(10).map((index, i) => (
+                                    <option key={i}>{index}</option>
+                                  ))}
+                                </select>
+                                <div>
+                                  {" "}
+                                  {/* <button
+                                    onClick={() =>
+                                      confirmNumberOfSets(exercise.sets)
+                                    }
+                                  >
+                                    Confirm
+                                  </button> */}
+                                </div>
+                              </div>
+                            )}
+                            <div>
+                              {exercise.arrayOfSets &&
+                                exercise.arrayOfSets.map((oneSet, i) => (
+                                  <div key={i}>
+                                    <ul>Set {oneSet.set}</ul>
+                                    <label>Reps:</label>
+                                    <input type="number" />
+                                  </div>
+                                ))}
+                            </div>
+                            <label>{exercise.name}</label>
+                            <button
+                              onClick={() =>
+                                addOrRemoveExercise(exercise.name, item)
+                              }
+                            >
+                              Remove
+                            </button>
+                          </div>
                         ) : null,
                       )}
                   </div>
