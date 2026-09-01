@@ -280,6 +280,32 @@ export default function Home() {
     return arrayOfOptions;
   };
 
+  const addRepetitionPerSet = (repetitions, exercise, oneSet) => {
+    console.log(
+      "addRepetitions, repetitions:",
+      repetitions,
+      "exercise:",
+      exercise,
+      "oneSet:",
+      oneSet,
+    );
+    setExercises(
+      exercises.map((groupExercises) => ({
+        ...groupExercises,
+        exercises: groupExercises.exercises?.map((oneExercise) =>
+          oneExercise.name === exercise.name
+            ? {
+                ...oneExercise,
+                arrayOfSets: oneExercise.arrayOfSets?.map((set) =>
+                  set.set === oneSet.set ? { ...set, reps: repetitions } : set,
+                ),
+              }
+            : oneExercise,
+        ),
+      })),
+    );
+  };
+
   useEffect(() => {
     console.log("useEffect, exercises:", exercises);
   }, [exercises, trainStep]);
@@ -366,7 +392,16 @@ export default function Home() {
                                   <div key={i}>
                                     <ul>Set {oneSet.set}</ul>
                                     <label>Reps:</label>
-                                    <input type="number" />
+                                    <input
+                                      type="number"
+                                      onChange={(e) =>
+                                        addRepetitionPerSet(
+                                          Number(e.target.value),
+                                          exercise,
+                                          oneSet,
+                                        )
+                                      }
+                                    />
                                   </div>
                                 ))}
                             </div>
