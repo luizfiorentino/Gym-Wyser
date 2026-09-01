@@ -306,6 +306,34 @@ export default function Home() {
     );
   };
 
+  const addWeightToSet = (weightValue, exercise, oneSet) => {
+    // console.log(
+    //   "weightValue:",
+    //   weightValue,
+    //   "exercise:",
+    //   exercise,
+    //   "oneSet:",
+    //   oneSet,
+    // );
+    setExercises(
+      exercises.map((groupExercises) => ({
+        ...groupExercises,
+        exercises: groupExercises.exercises?.map((oneExercise) =>
+          oneExercise.name === exercise.name
+            ? {
+                ...oneExercise,
+                arrayOfSets: oneExercise.arrayOfSets?.map((set) =>
+                  set.set === oneSet.set
+                    ? { ...set, weight: weightValue }
+                    : set,
+                ),
+              }
+            : oneExercise,
+        ),
+      })),
+    );
+  };
+
   useEffect(() => {
     console.log("useEffect, exercises:", exercises);
   }, [exercises, trainStep]);
@@ -396,6 +424,17 @@ export default function Home() {
                                       type="number"
                                       onChange={(e) =>
                                         addRepetitionPerSet(
+                                          Number(e.target.value),
+                                          exercise,
+                                          oneSet,
+                                        )
+                                      }
+                                    />
+                                    <label>Weight (kg):</label>
+                                    <input
+                                      type="number"
+                                      onChange={(e) =>
+                                        addWeightToSet(
                                           Number(e.target.value),
                                           exercise,
                                           oneSet,
