@@ -200,7 +200,7 @@ export default function Home() {
     );
   };
 
-  const submitTrain = () => {
+  const toSetsAndReps = () => {
     if (trainStep === 1) {
       setTrainStep(2);
     }
@@ -210,18 +210,16 @@ export default function Home() {
           return { ...item, isSelected: false };
         }),
       );
-      setTrainStep(1);
+      //setTrainStep(1);
     }
   };
 
   const updateExercise = (exercise, setOrReps, value) => {
-    // takes selected number of sets, eg. 3, and creates an array of objects one for each set ->
-    // [{set:1, reps: 0}, {set:2, reps: 0}...]
-    console.log("UPDATE EXERCISE CALLED");
+    //console.log("UPDATE EXERCISE CALLED");
     let arrayOfSets = [];
     for (let i = value; i > 0; i--) {
       arrayOfSets.push({ set: i, reps: 0 });
-      console.log("ARRAY OF SETS, value:", value);
+      //console.log("ARRAY OF SETS, value:", value);
     }
     setExercises(
       exercises.map((groupExercises) => ({
@@ -233,62 +231,27 @@ export default function Home() {
         ),
       })),
     );
-    console.log("arrayOfSets:::", arrayOfSets);
-
-    // console.log(
-    //   "clicked confirm number sets, exercise:",
-    //   "exerciseL",
-    //   exercise,
-    //   "sets:",
-    //   numSets,
-    //   "value:",
-    //   value,
-    //   "testAddSetsToExercises:",
-    //   testAddSetsToExercises,
-    // );
-  };
-
-  const confirmNumberOfSets = (sets) => {
-    console.log("confirmNumberOfSets, sets:", sets);
-  };
-
-  //const setsRange = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  const setsRange = (range) => {
-    let rangeArray = [];
-    for (let i = 0; i > range; i--) {
-      rangeArray.push(i);
-    }
-    return rangeArray;
-  };
-
-  const addSelectOptions = (numberofOptions) => {
-    console.log("addSelectedOptions called");
-    for (let i = numberofOptions; i < 0; i--) {
-      return <option>{i}</option>;
-    }
+    //console.log("arrayOfSets:::", arrayOfSets);
   };
 
   const testMe = (number) => {
-    // Describe the loop
-    // function receives a number eg. 5
-    // takes this number
     let arrayOfOptions = [];
     for (let i = 1; i <= number; i++) {
       arrayOfOptions.push(i);
     }
-    console.log("testMe, arrayOfOptions:", arrayOfOptions);
+    //console.log("testMe, arrayOfOptions:", arrayOfOptions);
     return arrayOfOptions;
   };
 
   const addRepetitionPerSet = (repetitions, exercise, oneSet) => {
-    console.log(
-      "addRepetitions, repetitions:",
-      repetitions,
-      "exercise:",
-      exercise,
-      "oneSet:",
-      oneSet,
-    );
+    // console.log(
+    //   "addRepetitions, repetitions:",
+    //   repetitions,
+    //   "exercise:",
+    //   exercise,
+    //   "oneSet:",
+    //   oneSet,
+    // );
     setExercises(
       exercises.map((groupExercises) => ({
         ...groupExercises,
@@ -307,14 +270,6 @@ export default function Home() {
   };
 
   const addWeightToSet = (weightValue, exercise, oneSet) => {
-    // console.log(
-    //   "weightValue:",
-    //   weightValue,
-    //   "exercise:",
-    //   exercise,
-    //   "oneSet:",
-    //   oneSet,
-    // );
     setExercises(
       exercises.map((groupExercises) => ({
         ...groupExercises,
@@ -332,6 +287,54 @@ export default function Home() {
         ),
       })),
     );
+  };
+
+  const toPreviousStep = () => {
+    setTrainStep(trainStep - 1);
+  };
+
+  const generateTrain = () => {
+    let selectedExercises = [];
+
+    for (let i = 0; i < exercises.length; i++) {
+      const chosenExercises = exercises[i].exercises?.filter(
+        (oneExercise) => oneExercise.chosen,
+      );
+      if (chosenExercises?.length) {
+        selectedExercises.push({
+          group: exercises[i].group,
+          exercises: chosenExercises,
+        });
+      }
+    }
+    //selectedExercises.filter((oneGroup) => oneGroup.exercises?.length !== 0);
+    console.log("selectedExercises:", selectedExercises);
+    setTrainStep(3);
+    return selectedExercises;
+
+    // const userTraining = exercises.map((groupExercises) =>
+    //   groupExercises.exercises?.filter(
+    //     (oneExercise) => oneExercise.chosen === true,
+    //   ),
+    // );
+    // console.log("userTraining:", userTraining);
+
+    // for (let i = 0; i < exercises.length; i++) {
+    //   const chosenExercises = exercises[i].exercises?.filter(
+    //     (oneExercise) => oneExercise.chosen,
+    //   );
+    //console.log("chosenExercises:", chosenExercises, "length:");
+
+    //   userTraining.push({
+    //     group: exercises[i].group,
+    //     exercises: chosenExercises,
+    //   });
+    // }
+    // const test = userTraining.map((oneItem) =>
+    //   console.log("oneItem:", oneItem, typeof oneItem),
+    // );
+
+    //console.log("userTraining, ", userTraining, "test:", test);
   };
 
   useEffect(() => {
@@ -370,22 +373,6 @@ export default function Home() {
                           <div key={i}>
                             {trainStep === 2 && (
                               <div>
-                                {/* <label>Sets </label>
-                                <input
-                                  type="number"
-                                  onChange={(e) =>
-                                    updateExercise(
-                                      exercise,
-                                      "sets",
-                                      Number(e.target.value),
-                                    )
-                                  }
-                                /> */}
-                                {/* <select>
-                                    {setsRange.map((oneOption) => (
-                                      <option>{oneOption}</option>
-                                    ))}
-                                  </select> */}
                                 {exercise.name} - remove -Sets:{" "}
                                 <label>SETS </label>{" "}
                                 <select
@@ -402,16 +389,7 @@ export default function Home() {
                                     <option key={i}>{index}</option>
                                   ))}
                                 </select>
-                                <div>
-                                  {" "}
-                                  {/* <button
-                                    onClick={() =>
-                                      confirmNumberOfSets(exercise.sets)
-                                    }
-                                  >
-                                    Confirm
-                                  </button> */}
-                                </div>
+                                <div> </div>
                               </div>
                             )}
                             <div>
@@ -488,11 +466,23 @@ export default function Home() {
             width={16}
             height={14}
           />
-          <div className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]">
-            <button onClick={() => submitTrain()}>
-              {trainStep === 1 ? "Confirm train" : "Return"}
-            </button>
-          </div>
+          {trainStep === 1 && (
+            <div className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]">
+              <button onClick={() => toSetsAndReps()}>
+                "To Sets & Reps"
+              </button>{" "}
+            </div>
+          )}
+          {trainStep >= 2 && (
+            <div className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]">
+              <button onClick={() => toPreviousStep()}>Back</button>
+            </div>
+          )}
+          {trainStep === 2 && (
+            <div className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]">
+              <button onClick={() => generateTrain()}>Get train!</button>
+            </div>
+          )}
 
           <a
             className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
