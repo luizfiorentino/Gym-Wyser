@@ -339,7 +339,7 @@ export default function Home() {
   // };
 
   useEffect(() => {
-    console.log("useEffect, exercises:", exercises);
+    //console.log("useEffect, exercises:", exercises);
   }, [exercises, trainStep]);
 
   return (
@@ -402,6 +402,11 @@ export default function Home() {
                                   <div>
                                     <label>Number of Sets </label>{" "}
                                     <select
+                                      // value={
+                                      //   exercise.arrayOfSets[i]?.reps
+                                      //     ? exercise.arrayOfSets[i]?.reps
+                                      //     : ""
+                                      // }
                                       onChange={(e) =>
                                         updateExercise(
                                           exercise,
@@ -429,6 +434,7 @@ export default function Home() {
                                         <label>Reps:</label>
                                         <input
                                           type="number"
+                                          value={oneSet.reps ? oneSet.reps : ""}
                                           onChange={(e) =>
                                             addRepetitionPerSet(
                                               Number(e.target.value),
@@ -440,6 +446,9 @@ export default function Home() {
                                         <label>Weight (kg) - optional:</label>
                                         <input
                                           type="number"
+                                          value={
+                                            oneSet.weight ? oneSet.weight : ""
+                                          }
                                           onChange={(e) =>
                                             addWeightToSet(
                                               Number(e.target.value),
