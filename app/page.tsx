@@ -307,34 +307,13 @@ export default function Home() {
         });
       }
     }
-    //selectedExercises.filter((oneGroup) => oneGroup.exercises?.length !== 0);
     console.log("selectedExercises:", selectedExercises);
     setTrainStep(3);
     return selectedExercises;
+  };
 
-    // const userTraining = exercises.map((groupExercises) =>
-    //   groupExercises.exercises?.filter(
-    //     (oneExercise) => oneExercise.chosen === true,
-    //   ),
-    // );
-    // console.log("userTraining:", userTraining);
-
-    // for (let i = 0; i < exercises.length; i++) {
-    //   const chosenExercises = exercises[i].exercises?.filter(
-    //     (oneExercise) => oneExercise.chosen,
-    //   );
-    //console.log("chosenExercises:", chosenExercises, "length:");
-
-    //   userTraining.push({
-    //     group: exercises[i].group,
-    //     exercises: chosenExercises,
-    //   });
-    // }
-    // const test = userTraining.map((oneItem) =>
-    //   console.log("oneItem:", oneItem, typeof oneItem),
-    // );
-
-    //console.log("userTraining, ", userTraining, "test:", test);
+  const crescentOrderNumbers = (a, b) => {
+    return a.set - b.set;
   };
 
   useEffect(() => {
@@ -394,33 +373,35 @@ export default function Home() {
                             )}
                             <div>
                               {exercise.arrayOfSets &&
-                                exercise.arrayOfSets.map((oneSet, i) => (
-                                  <div key={i}>
-                                    <ul>Set {oneSet.set}</ul>
-                                    <label>Reps:</label>
-                                    <input
-                                      type="number"
-                                      onChange={(e) =>
-                                        addRepetitionPerSet(
-                                          Number(e.target.value),
-                                          exercise,
-                                          oneSet,
-                                        )
-                                      }
-                                    />
-                                    <label>Weight (kg):</label>
-                                    <input
-                                      type="number"
-                                      onChange={(e) =>
-                                        addWeightToSet(
-                                          Number(e.target.value),
-                                          exercise,
-                                          oneSet,
-                                        )
-                                      }
-                                    />
-                                  </div>
-                                ))}
+                                exercise.arrayOfSets
+                                  .sort(crescentOrderNumbers)
+                                  .map((oneSet, i) => (
+                                    <div key={i}>
+                                      <ul>Set {oneSet.set}</ul>
+                                      <label>Reps:</label>
+                                      <input
+                                        type="number"
+                                        onChange={(e) =>
+                                          addRepetitionPerSet(
+                                            Number(e.target.value),
+                                            exercise,
+                                            oneSet,
+                                          )
+                                        }
+                                      />
+                                      <label>Weight (kg):</label>
+                                      <input
+                                        type="number"
+                                        onChange={(e) =>
+                                          addWeightToSet(
+                                            Number(e.target.value),
+                                            exercise,
+                                            oneSet,
+                                          )
+                                        }
+                                      />
+                                    </div>
+                                  ))}
                             </div>
                             <label>{exercise.name}</label>
                             <button
