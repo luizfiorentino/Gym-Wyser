@@ -308,13 +308,35 @@ export default function Home() {
       }
     }
     console.log("selectedExercises:", selectedExercises);
-    setTrainStep(3);
+    //setTrainStep(3);
     return selectedExercises;
+  };
+
+  const displayTrain = () => {
+    setTrainStep(3);
   };
 
   const crescentOrderNumbers = (a, b) => {
     return a.set - b.set;
   };
+
+  // const testObj = {
+  //   name: "Exercises",
+  //   order: 32,
+  //   sets: [
+  //     { set: 1, reps: 10 },
+  //     { set: 2, reps: 12 },
+  //   ],
+  // };
+  //console.log("one:", testObj);
+  //delete testObj.sets;
+  //console.log("two:", testObj);
+  // const removeKey = (obj) => {
+  //   let testObj = null;
+  //   const newObj = obj;
+  //   testObj = newObj;
+  //   console.log("HERE, testObj:", testObj);
+  // };
 
   useEffect(() => {
     console.log("useEffect, exercises:", exercises);
@@ -327,9 +349,32 @@ export default function Home() {
           <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
             Welcome to Gym-Wizer
           </h1>
-
+          {trainStep === 1 && <h2>Step 1 - Exercise Selection</h2>}
+          {trainStep === 2 && <h2>Step 2 - Sets, Reps & Weight</h2>}
+          {trainStep === 3 && <h2>Step 3 - Your train!</h2>}
           {
             <div>
+              {trainStep === 1 &&
+                exercises.length &&
+                exercises.map((group, i) => (
+                  <div key={i}>
+                    <button onClick={() => displayGroupExercises(group.group)}>
+                      {group.group}
+                    </button>
+                    {group.isSelected &&
+                      group?.exercises?.map((item, j) => (
+                        <div key={j}>
+                          <ul
+                            onClick={() =>
+                              addOrRemoveExercise(item.name, group)
+                            }
+                          >
+                            {item.name} {!item.chosen ? "+" : "-"}
+                          </ul>
+                        </div>
+                      ))}
+                  </div>
+                ))}
               <div>
                 {/* {exercises?.find((group) =>
                   group.exercises?.find((exercise) => exercise.chosen),
@@ -337,106 +382,137 @@ export default function Home() {
                   ? "Selected Exercises"
                   : "Add exercises"} */}
               </div>
-              {exercises.map((item, i) => (
-                <div key={i}>
-                  <h2>
-                    {item.exercises?.find((exercise) => exercise.chosen) &&
-                      item.group}
-                  </h2>
+              {trainStep === 2 &&
+                exercises.map((item, i) => (
+                  <div key={i}>
+                    <h2>
+                      {item.exercises?.find((exercise) => exercise.chosen) &&
+                        item.group}
+                    </h2>
 
-                  <div>
-                    {" "}
-                    {item.exercises &&
-                      item.exercises.map((exercise, i) =>
-                        exercise.chosen ? (
-                          <div key={i}>
-                            {trainStep === 2 && (
+                    <div>
+                      {" "}
+                      {item.exercises &&
+                        item.exercises.map((exercise, i) =>
+                          exercise.chosen ? (
+                            <div key={i}>
+                              {trainStep === 2 && (
+                                <div>
+                                  {exercise.name}
+                                  <div>
+                                    <label>Number of Sets </label>{" "}
+                                    <select
+                                      onChange={(e) =>
+                                        updateExercise(
+                                          exercise,
+                                          "sets",
+                                          Number(e.target.value),
+                                        )
+                                      }
+                                    >
+                                      <option>Choose a number</option>
+                                      {testMe(10).map((index, i) => (
+                                        <option key={i}>{index}</option>
+                                      ))}
+                                    </select>
+                                    <div> </div>
+                                  </div>
+                                </div>
+                              )}
                               <div>
-                                {exercise.name} - remove -Sets:{" "}
-                                <label>SETS </label>{" "}
-                                <select
-                                  onChange={(e) =>
-                                    updateExercise(
-                                      exercise,
-                                      "sets",
-                                      Number(e.target.value),
-                                    )
-                                  }
-                                >
-                                  <option>Chose a number</option>
-                                  {testMe(10).map((index, i) => (
-                                    <option key={i}>{index}</option>
-                                  ))}
-                                </select>
-                                <div> </div>
+                                {exercise.arrayOfSets &&
+                                  exercise.arrayOfSets
+                                    .sort(crescentOrderNumbers)
+                                    .map((oneSet, i) => (
+                                      <div key={i}>
+                                        <ul>Set {oneSet.set}</ul>
+                                        <label>Reps:</label>
+                                        <input
+                                          type="number"
+                                          onChange={(e) =>
+                                            addRepetitionPerSet(
+                                              Number(e.target.value),
+                                              exercise,
+                                              oneSet,
+                                            )
+                                          }
+                                        />
+                                        <label>Weight (kg) - optional:</label>
+                                        <input
+                                          type="number"
+                                          onChange={(e) =>
+                                            addWeightToSet(
+                                              Number(e.target.value),
+                                              exercise,
+                                              oneSet,
+                                            )
+                                          }
+                                        />
+                                      </div>
+                                    ))}
                               </div>
-                            )}
-                            <div>
-                              {exercise.arrayOfSets &&
-                                exercise.arrayOfSets
-                                  .sort(crescentOrderNumbers)
-                                  .map((oneSet, i) => (
-                                    <div key={i}>
-                                      <ul>Set {oneSet.set}</ul>
-                                      <label>Reps:</label>
-                                      <input
-                                        type="number"
-                                        onChange={(e) =>
-                                          addRepetitionPerSet(
-                                            Number(e.target.value),
-                                            exercise,
-                                            oneSet,
-                                          )
-                                        }
-                                      />
-                                      <label>Weight (kg):</label>
-                                      <input
-                                        type="number"
-                                        onChange={(e) =>
-                                          addWeightToSet(
-                                            Number(e.target.value),
-                                            exercise,
-                                            oneSet,
-                                          )
-                                        }
-                                      />
-                                    </div>
-                                  ))}
+                              {/* <label>{exercise.name}</label> */}
+
+                              <button
+                                onClick={() =>
+                                  addOrRemoveExercise(exercise.name, item)
+                                }
+                              >
+                                Remove
+                              </button>
                             </div>
-                            <label>{exercise.name}</label>
-                            <button
-                              onClick={() =>
-                                addOrRemoveExercise(exercise.name, item)
-                              }
-                            >
-                              Remove
-                            </button>
-                          </div>
-                        ) : null,
-                      )}
+                          ) : null,
+                        )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              {trainStep === 3 &&
+                exercises.map((item, i) => (
+                  <div key={i}>
+                    <h2>
+                      {item.exercises?.find((exercise) => exercise.chosen) &&
+                        item.group}
+                    </h2>
+
+                    <div>
+                      {" "}
+                      {item.exercises &&
+                        item.exercises.map((exercise, i) =>
+                          exercise.chosen ? (
+                            <div key={i}>
+                              {trainStep === 3 && <div>{exercise.name}</div>}
+                              <div>
+                                {exercise.arrayOfSets &&
+                                  exercise.arrayOfSets
+                                    .sort(crescentOrderNumbers)
+                                    .map((oneSet, i) => (
+                                      <div key={i}>
+                                        <ul>Set {oneSet.set}</ul>
+                                        <p>Reps - {oneSet.reps}</p>
+                                        {oneSet.weight ? (
+                                          <p>Weight - {oneSet.weight}</p>
+                                        ) : (
+                                          ""
+                                        )}
+                                      </div>
+                                    ))}
+                              </div>
+                              {/* <label>{exercise.name}</label>
+                              <button
+                                onClick={() =>
+                                  addOrRemoveExercise(exercise.name, item)
+                                }
+                              >
+                                Remove
+                              </button> */}
+                            </div>
+                          ) : null,
+                        )}
+                    </div>
+                  </div>
+                ))}
             </div>
           }
-
-          {trainStep === 1 &&
-            exercises.length &&
-            exercises.map((group, i) => (
-              <div key={i}>
-                <button onClick={() => displayGroupExercises(group.group)}>
-                  {group.group}
-                </button>
-                {group.isSelected &&
-                  group?.exercises?.map((item, j) => (
-                    <div key={j}>
-                      <ul onClick={() => addOrRemoveExercise(item.name, group)}>
-                        {item.name} {!item.chosen ? "+" : "-"}
-                      </ul>
-                    </div>
-                  ))}
-              </div>
-            ))}
         </div>
 
         <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
@@ -450,7 +526,7 @@ export default function Home() {
           {trainStep === 1 && (
             <div className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]">
               <button onClick={() => toSetsAndReps()}>
-                "To Sets & Reps"
+                To Sets & Reps
               </button>{" "}
             </div>
           )}
@@ -461,7 +537,7 @@ export default function Home() {
           )}
           {trainStep === 2 && (
             <div className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]">
-              <button onClick={() => generateTrain()}>Get train!</button>
+              <button onClick={() => displayTrain()}>Get train!</button>
             </div>
           )}
 
