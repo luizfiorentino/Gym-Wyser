@@ -320,24 +320,6 @@ export default function Home() {
     return a.set - b.set;
   };
 
-  // const testObj = {
-  //   name: "Exercises",
-  //   order: 32,
-  //   sets: [
-  //     { set: 1, reps: 10 },
-  //     { set: 2, reps: 12 },
-  //   ],
-  // };
-  //console.log("one:", testObj);
-  //delete testObj.sets;
-  //console.log("two:", testObj);
-  // const removeKey = (obj) => {
-  //   let testObj = null;
-  //   const newObj = obj;
-  //   testObj = newObj;
-  //   console.log("HERE, testObj:", testObj);
-  // };
-
   useEffect(() => {
     //console.log("useEffect, exercises:", exercises);
   }, [exercises, trainStep]);

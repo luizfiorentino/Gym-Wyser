@@ -1,3 +1,24 @@
+## The Gym-Wyzer
+
+This app allows users to create their trainings and keep progress of their workout activities. It follows a simple flow:
+
+1. exercise selection from each muscle group: chest, back, shoulders, biceps, triceps, abs, and legs
+2. setup of the number of sets, reps, and weight per exercise
+3. workout storage and follow up
+
+The app provides a flexible way of creating the workout: the minimum element of it consists of the exercise name. Number of reps and weight are optional.
+
+## Next steps/ features
+
+- user can give a name to the workout
+- workout can be saved
+- user can later change or add an optional value like number of sets, reps, and weight
+- user can access the workout, and mark it as done
+- app shows all performed workouts & insights about it
+- user can add new exercises
+- create user account
+- disclaimer/ terms of agreement (an expert/ doctor must be consulted before engaging physical activity)
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
