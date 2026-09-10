@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import StepBanner from "./components/StepBanner";
 
 export default function Home() {
   const [trainStep, setTrainStep] = useState(1);
@@ -331,9 +332,13 @@ export default function Home() {
           <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
             Welcome to Gym-Wizer
           </h1>
-          {trainStep === 1 && <h2>Step 1 - Exercise Selection</h2>}
-          {trainStep === 2 && <h2>Step 2 - Sets, Reps & Weight</h2>}
-          {trainStep === 3 && <h2>Step 3 - Your train!</h2>}
+          {trainStep === 1 && (
+            <StepBanner>Step 1 - Exercise Selection</StepBanner>
+          )}
+          {trainStep === 2 && (
+            <StepBanner>Step 2 - Sets, Reps & Weight</StepBanner>
+          )}
+          {trainStep === 3 && <StepBanner>Step 3 - Your train!</StepBanner>}
           {
             <div>
               {trainStep === 1 &&
@@ -479,7 +484,11 @@ export default function Home() {
                                     .map((oneSet, i) => (
                                       <div key={i}>
                                         <ul>Set {oneSet.set}</ul>
-                                        <p>Reps - {oneSet.reps}</p>
+                                        {oneSet.reps ? (
+                                          <p>Reps - {oneSet.reps}</p>
+                                        ) : (
+                                          ""
+                                        )}
                                         {oneSet.weight ? (
                                           <p>Weight - {oneSet.weight}</p>
                                         ) : (
